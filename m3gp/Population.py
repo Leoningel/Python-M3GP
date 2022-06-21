@@ -150,13 +150,13 @@ class Population:
 					self.trainingKappaOverTime.append(0)
 					self.testKappaOverTime.append(0)
 					self.trainingMSEOverTime.append(self.bestIndividual.getMSE(self.Tr_x, self.Tr_y, pred="Tr"))
-					fitness = self.bestIndividual.getMSE(self.Te_x, self.Te_y, pred="Te")
-					self.testMSEOverTime.append(fitness)
-					row = [ (-1 * fitness), self.bestIndividual.getDepth(), self.bestIndividual.getSize(), self.currentGeneration, (time.time() - start), self.seed ]
-					rows.append(row)
+					self.testMSEOverTime.append(self.bestIndividual.getMSE(self.Te_x, self.Te_y, pred="Te"))
 				self.sizeOverTime.append(self.bestIndividual.getSize())
 				self.dimensionsOverTime.append(self.bestIndividual.getNumberOfDimensions())
 				self.generationTimes.append(duration)
+			if self.fitnessType in ["MSE"]:
+				row = [ (-1 * self.bestIndividual.getMSE(self.Tr_x, self.Tr_y, pred="Tr")), self.bestIndividual.getDepth(), self.bestIndividual.getSize(), self.currentGeneration, (time.time() - start), self.seed ]
+				rows.append(row)
 				
 		if (self.fitnessType in ["MSE"]) and (self.csv_file != ''):
 			with open(f"{self.csv_file}", "w", newline="") as outfile:
