@@ -1,3 +1,4 @@
+from typing import List
 from .Individual import Individual
 from .GeneticOperators import getElite, getOffspring, discardDeep
 import multiprocessing as mp
@@ -25,7 +26,7 @@ class Population:
 	terminals = None
 
 
-	population = None
+	population: List[Individual] = None
 	bestIndividual: Individual = None
 	currentGeneration = 0
 
