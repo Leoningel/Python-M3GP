@@ -1,6 +1,6 @@
 from .Population import Population
 
-from random import Random
+from random import Random, random
 
 # 
 # By using this file, you are agreeing to this product's EULA
@@ -42,7 +42,7 @@ class M3GP:
 
 	def __init__(self, operators=[("+",2),("-",2),("*",2),("/",2)], max_initial_depth = 6, population_size = 500, 
 		max_generation = 100, tournament_size = 5, elitism_size = 1, limit_depth = 17, 
-		dim_min = 1, dim_max = 9999, threads=1, random_state = 42, verbose = True, model_name="MahalanobisDistanceClassifier", fitnessType="Accuracy"):
+		dim_min = 1, dim_max = 9999, threads=1, random_state = 42, verbose = True, model_name="MahalanobisDistanceClassifier", fitnessType="Accuracy", csv_file = ''):
 
 		if sum( [0 if op in [("+",2),("-",2),("*",2),("/",2)] else 0 for op in operators ] ) > 0:
 			print( "[Warning] Some of the following operators may not be supported:", operators)
@@ -58,8 +58,10 @@ class M3GP:
 		self.threads = max(1, threads)
 
 		self.rng = Random(random_state)
+		self.seed = random_state
 		self.model_name = model_name
 		self.fitnessType = fitnessType
+		self.csv_file = csv_file
 
 		self.verbose = verbose
 		pass
@@ -86,7 +88,7 @@ class M3GP:
 
 		self.population = Population(Tr_X, Tr_Y, Te_X, Te_Y, self.operators, self.max_initial_depth,
 			self.population_size, self.max_generation, self.tournament_size, self.elitism_size, 
-			self.limit_depth, self.dim_min, self.dim_max, self.threads, self.rng, self.verbose, self.model_name, self.fitnessType)
+			self.limit_depth, self.dim_min, self.dim_max, self.threads, self.rng, self.verbose, self.model_name, self.fitnessType, csv_file = self.csv_file, seed = self.seed)
 		self.population.train()
 
 		self.getBestIndividual().prun(min_dim = self.dim_min, simp=True)

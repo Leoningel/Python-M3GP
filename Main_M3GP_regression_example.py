@@ -33,7 +33,7 @@ Tr_X, Te_X, Tr_Y, Te_Y = train_test_split(ds.drop(columns=[class_header]), ds[cl
 		train_size=0.7, random_state = 42)
 
 # Train a model
-m3gp = M3GP(max_generation=20, model_name="DecisionTreeRegressor", fitnessType="MSE",random_state=21)
+m3gp = M3GP(max_generation=2, model_name="DecisionTreeRegressor", fitnessType="MSE",random_state=21, csv_file="")
 m3gp.fit(Tr_X, Tr_Y, Te_X, Te_Y)
 
 # Predict test results

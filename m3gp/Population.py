@@ -1,3 +1,4 @@
+import csv
 from typing import List
 from .Individual import Individual
 from .GeneticOperators import getElite, getOffspring, discardDeep
@@ -51,7 +52,7 @@ class Population:
 
 	def __init__(self, Tr_x, Tr_y, Te_x, Te_y, operators, max_depth, population_size,
 		max_generation, tournament_size, elitism_size, limit_depth, dim_min, 
-		dim_max, threads, rng, verbose, model_name, fitnessType):
+		dim_max, threads, rng, verbose, model_name, fitnessType, csv_file, seed):
 
 		self.Tr_x = Tr_x
 		self.Tr_y = Tr_y
@@ -74,6 +75,8 @@ class Population:
 
 		self.dim_min = dim_min
 		self.dim_max = dim_max
+		self.csv_file = csv_file
+		self.seed = seed
 
 		self.population = []
 
@@ -116,6 +119,8 @@ class Population:
 		'''
 		if self.verbose:
 			print("> Running log:")
+		start = time.time()
+		rows = list()
 
 		while self.currentGeneration < self.max_generation:
 			if not self.stoppingCriteria():
@@ -145,10 +150,20 @@ class Population:
 					self.trainingKappaOverTime.append(0)
 					self.testKappaOverTime.append(0)
 					self.trainingMSEOverTime.append(self.bestIndividual.getMSE(self.Tr_x, self.Tr_y, pred="Tr"))
-					self.testMSEOverTime.append(self.bestIndividual.getMSE(self.Te_x, self.Te_y, pred="Te"))
+					fitness = self.bestIndividual.getMSE(self.Te_x, self.Te_y, pred="Te")
+					self.testMSEOverTime.append(fitness)
+					row = [ (-1 * fitness), self.bestIndividual.getDepth(), self.bestIndividual.getSize(), self.currentGeneration, (time.time() - start), self.seed ]
+					rows.append(row)
 				self.sizeOverTime.append(self.bestIndividual.getSize())
 				self.dimensionsOverTime.append(self.bestIndividual.getNumberOfDimensions())
 				self.generationTimes.append(duration)
+				
+		if (self.fitnessType in ["MSE"]) and (self.csv_file != ''):
+			with open(f"{self.csv_file}", "w", newline="") as outfile:
+				writer = csv.writer(outfile)
+				writer.writerow(["fitness","depth","nodes","number_of_the_generation","time_since_the_start_of_the_evolution","seed"])
+				for row in rows:
+					writer.writerow(row)
 
 		if self.verbose:
 			print()
