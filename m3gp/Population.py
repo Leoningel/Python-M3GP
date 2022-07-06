@@ -1,5 +1,7 @@
 import csv
 from typing import List
+
+import pandas as pd
 from .Individual import Individual
 from .GeneticOperators import getElite, getOffspring, discardDeep
 import multiprocessing as mp
@@ -156,7 +158,7 @@ class Population:
 				self.generationTimes.append(duration)
 			if self.fitnessType in ["MSE"]:
 				test_fitness = 0
-				if self.Te_x != None and self.Te_y != None:
+				if type(self.Te_x) == pd.DataFrame and type(self.Te_y)  == pd.DataFrame:
 					test_fitness = (-1 * self.bestIndividual.getMSE(self.Te_x, self.Te_y, pred="Te"))
 				row = [ (-1 * self.bestIndividual.getMSE(self.Tr_x, self.Tr_y, pred="Tr")), test_fitness, self.bestIndividual.getDepth(), self.bestIndividual.getSize(), self.currentGeneration, (time.time() - start), self.seed ]
 				rows.append(row)
