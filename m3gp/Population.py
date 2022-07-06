@@ -155,7 +155,10 @@ class Population:
 				self.dimensionsOverTime.append(self.bestIndividual.getNumberOfDimensions())
 				self.generationTimes.append(duration)
 			if self.fitnessType in ["MSE"]:
-				row = [ (-1 * self.bestIndividual.getMSE(self.Tr_x, self.Tr_y, pred="Tr")), (-1 * self.bestIndividual.getMSE(self.Te_x, self.Te_y, pred="Te")), self.bestIndividual.getDepth(), self.bestIndividual.getSize(), self.currentGeneration, (time.time() - start), self.seed ]
+				test_fitness = 0
+				if self.Te_x and self.Te_y:
+					test_fitness = (-1 * self.bestIndividual.getMSE(self.Te_x, self.Te_y, pred="Te"))
+				row = [ (-1 * self.bestIndividual.getMSE(self.Tr_x, self.Tr_y, pred="Tr")), test_fitness, self.bestIndividual.getDepth(), self.bestIndividual.getSize(), self.currentGeneration, (time.time() - start), self.seed ]
 				rows.append(row)
 				
 		if (self.fitnessType in ["MSE"]) and (self.csv_file != ''):
