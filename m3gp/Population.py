@@ -155,13 +155,13 @@ class Population:
 				self.dimensionsOverTime.append(self.bestIndividual.getNumberOfDimensions())
 				self.generationTimes.append(duration)
 			if self.fitnessType in ["MSE"]:
-				row = [ (-1 * self.bestIndividual.getMSE(self.Tr_x, self.Tr_y, pred="Tr")), self.bestIndividual.getDepth(), self.bestIndividual.getSize(), self.currentGeneration, (time.time() - start), self.seed ]
+				row = [ (-1 * self.bestIndividual.getMSE(self.Tr_x, self.Tr_y, pred="Tr")), (-1 * self.bestIndividual.getMSE(self.Te_x, self.Te_y, pred="Te")), self.bestIndividual.getDepth(), self.bestIndividual.getSize(), self.currentGeneration, (time.time() - start), self.seed ]
 				rows.append(row)
 				
 		if (self.fitnessType in ["MSE"]) and (self.csv_file != ''):
 			with open(f"{self.csv_file}", "w", newline="") as outfile:
 				writer = csv.writer(outfile)
-				writer.writerow(["fitness","depth","nodes","number_of_the_generation","time_since_the_start_of_the_evolution","seed"])
+				writer.writerow(["fitness","test_fitness","depth","nodes","number_of_the_generation","time_since_the_start_of_the_evolution","seed"])
 				for row in rows:
 					writer.writerow(row)
 
