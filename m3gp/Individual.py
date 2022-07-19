@@ -1,4 +1,4 @@
-from sklearn.tree import DecisionTreeRegressor
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from .Node import Node
 from .MahalanobisDistanceClassifier import MahalanobisDistanceClassifier
 
@@ -77,6 +77,8 @@ class Individual:
 			return MahalanobisDistanceClassifier()
 		elif self.model_name == "DecisionTreeRegressor":
 			return DecisionTreeRegressor(max_depth=4)
+		elif self.model_name == "DecisionTreeClassifier":
+			return DecisionTreeClassifier(max_depth=4)
 
 	def fit(self, Tr_x, Tr_y):
 		'''
