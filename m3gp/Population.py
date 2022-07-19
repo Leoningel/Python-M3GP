@@ -156,14 +156,19 @@ class Population:
 				self.sizeOverTime.append(self.bestIndividual.getSize())
 				self.dimensionsOverTime.append(self.bestIndividual.getNumberOfDimensions())
 				self.generationTimes.append(duration)
-			if self.fitnessType in ["MSE"]:
+			if self.fitnessType in ["MSE", "WAF"]:
 				test_fitness = 0
-				if type(self.Te_x) == pd.DataFrame and type(self.Te_y)  == pd.Series:
-					test_fitness = (-1 * self.bestIndividual.getMSE(self.Te_x, self.Te_y, pred="Te"))
-				row = [ (-1 * self.bestIndividual.getMSE(self.Tr_x, self.Tr_y, pred="Tr")), test_fitness, self.bestIndividual.getDepth(), self.bestIndividual.getSize(), self.currentGeneration, (time.time() - start), self.seed ]
+				if self.fitnessType in ["MSE"]:
+					if type(self.Te_x) == pd.DataFrame and type(self.Te_y)  == pd.Series:
+						test_fitness = (-1 * self.bestIndividual.getMSE(self.Te_x, self.Te_y, pred="Te"))
+					row = [ (-1 * self.bestIndividual.getMSE(self.Tr_x, self.Tr_y, pred="Tr")), test_fitness, self.bestIndividual.getDepth(), self.bestIndividual.getSize(), self.currentGeneration, (time.time() - start), self.seed ]
+				elif self.fitnessType in ["WAF"]:
+					if type(self.Te_x) == pd.DataFrame and type(self.Te_y)  == pd.Series:
+						test_fitness = self.bestIndividual.getWaF(self.Te_x, self.Te_y, pred="Te")
+					row = [ self.bestIndividual.getWaf(self.Tr_x, self.Tr_y, pred="Tr"), test_fitness, self.bestIndividual.getDepth(), self.bestIndividual.getSize(), self.currentGeneration, (time.time() - start), self.seed ]
 				rows.append(row)
 				
-		if (self.fitnessType in ["MSE"]) and (self.csv_file != ''):
+		if (self.fitnessType in ["MSE", "WAF"]) and (self.csv_file != ''):
 			with open(f"{self.csv_file}", "w", newline="") as outfile:
 				writer = csv.writer(outfile)
 				writer.writerow(["fitness","test_fitness","depth","nodes","number_of_the_generation","time_since_the_start_of_the_evolution","seed"])
