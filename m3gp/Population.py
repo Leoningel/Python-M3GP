@@ -165,7 +165,7 @@ class Population:
 				elif self.fitnessType in ["WAF"]:
 					if type(self.Te_x) == pd.DataFrame and type(self.Te_y)  == pd.Series:
 						test_fitness = self.bestIndividual.getWaF(self.Te_x, self.Te_y, pred="Te")
-					row = [ self.bestIndividual.getWaf(self.Tr_x, self.Tr_y, pred="Tr"), test_fitness, self.bestIndividual.getDepth(), self.bestIndividual.getSize(), self.currentGeneration, (time.time() - start), self.seed ]
+					row = [ self.bestIndividual.getWaF(self.Tr_x, self.Tr_y, pred="Tr"), test_fitness, self.bestIndividual.getDepth(), self.bestIndividual.getSize(), self.currentGeneration, (time.time() - start), self.seed ]
 				rows.append(row)
 				
 		if (self.fitnessType in ["MSE", "WAF"]) and (self.csv_file != ''):
