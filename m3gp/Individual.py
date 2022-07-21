@@ -155,7 +155,7 @@ class Individual:
 			if self.fitnessType == "WAF":
 				self.fit(self.training_X, self.training_Y)
 				self.getTrainingPredictions()
-				waf = f1_score(self.trainingPredictions, self.training_Y, average="weighted")
+				waf = f1_score(self.trainingPredictions, self.training_Y)
 				self.fitness = waf 
 
 			if self.fitnessType == "2FOLD":
@@ -192,7 +192,7 @@ class Individual:
 
 		if self.fitnessType == "WAF":
 			self.getTrainingPredictions()
-			return f1_score(self.trainingPredictions, self.training_Y, average="weighted")
+			return f1_score(self.trainingPredictions, self.training_Y)
 
 
 	def getTestMeasure(self, test_X, test_Y):
